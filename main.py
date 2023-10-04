@@ -63,7 +63,7 @@ if __name__ == "__main__":
                 course_details.append(course_detail)
             courseDetails[roll] = course_details
         except:
-            display('-', f"\rError in Scrapping Courses of {Back.MAGENTA}{roll}{Back.RESET}")
+            display('-', f"Error in Scrapping Courses of {Back.MAGENTA}{roll}{Back.RESET}", start='\r')
             continue
         display('*', f"Entities Scrapped = {Back.MAGENTA}{index+1}/{len(student_data)} ({(index+1)/len(student_data)*100:.2f}%){Back.RESET}", start='\r', end='')
     display(':', f"Dumping Data to {Back.MAGENTA}{data.write}{Back.RESET}", start='\n')
