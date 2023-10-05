@@ -54,14 +54,19 @@ if __name__ == "__main__":
     courseDetails = {}
     for index, roll in enumerate(student_data):
         course_details = []
-        data = requests.get(f"http://172.26.142.68/dccourse/studdc.php?roll_no={roll}")
-        page = BeautifulSoup(data.text, "html.parser")
+        response = requests.get(f"http://172.26.142.68/dccourse/studdc.php?roll_no={roll}")
+        page = BeautifulSoup(response.text, "html.parser")
         tr_tags = page.find_all("tr")[1:]
         for tr_tag in tr_tags:
             course_detail = {}
             td_tags = tr_tag.find_all("td")
-            for tag_index, tag in tag_id.items():
-                course_detail[tag] = td_tags[tag_index].text.strip()
+            tag_range = len(tag_id) if len(tag_id) < len(td_tags) else len(td_tags)
+            try:
+                for tag_index in range(tag_range):
+                    course_detail[tag_id[tag_index]] = td_tags[tag_index].text.strip()
+            except:
+                display('-', f"Error while Scrapping the Data of {Back.MAGENTA}{roll}{Back.RESET}", start='\r')
+                continue
             course_details.append(course_detail)
         courseDetails[roll] = course_details
         display('*', f"Entities Scrapped = {Back.MAGENTA}{index+1}/{len(student_data)} ({(index+1)/len(student_data)*100:.2f}%){Back.RESET}", start='\r', end='')
