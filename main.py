@@ -86,7 +86,7 @@ if __name__ == "__main__":
     for index, studetn_data_division in enumerate(student_data_divisions):
         threads.append(pool.apply_async(getStudentsCourseDetails, (index, studetn_data_division, )))
     for thread in threads:
-        thread.get()
+        courseDetails.update(thread.get())
     pool.close()
     pool.join()
     display(':', f"Dumping Data to {Back.MAGENTA}{data.write}{Back.RESET}", start='\n')
