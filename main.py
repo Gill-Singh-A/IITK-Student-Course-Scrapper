@@ -56,7 +56,7 @@ def getStudentsCourseDetails(thread_index, student_data):
             course_details.append(course_detail)
         courseDetails[roll] = course_details
         with lock:
-            display('*', f"Entity Scrapped = {Back.MAGENTA}{index+1}/{len(student_data)} ({(index+1)/len(student_data)*100:.2f}%){Back.RESET}", start=f"{thread_index+1} ")
+            display('*', f"Entities Scrapped = {Back.MAGENTA}{index+1}/{len(student_data)} ({(index+1)/len(student_data)*100:.2f}%){Back.RESET}", start=f"{thread_index+1} ")
     return courseDetails
 if __name__ == "__main__":
     data = get_arguments(('-l', "--load", "load", "File of Roll Numbers to load (pickle file)"),
