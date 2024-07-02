@@ -79,32 +79,24 @@ if __name__ == "__main__":
     if not data.write:
         data.write = f"{date.today()} {strftime('%H_%M_%S', localtime())}"
     courseDetails = {}
-<<<<<<< HEAD
-    pool = Pool(thread_count)
-    total_students = len(student_data)
-    student_data_divisions = [student_data[group*total_students//thread_count : (group+1)*total_students//thread_count] for group in range(thread_count)]
-    threads = []
-    for index, studetn_data_division in enumerate(student_data_divisions):
-        threads.append(pool.apply_async(getStudentsCourseDetails, (index, studetn_data_division, )))
-    for thread in threads:
-        courseDetails.update(thread.get())
-    pool.close()
-    pool.join()
-=======
     for index, roll in enumerate(student_data):
         course_details = []
-        data = requests.get(f"http://172.26.142.68/dccourse/studdc.php?roll_no={roll}")
-        page = BeautifulSoup(data.text, "html.parser")
+        response = requests.get(f"http://172.26.142.68/dccourse/studdc.php?roll_no={roll}")
+        page = BeautifulSoup(response.text, "html.parser")
         tr_tags = page.find_all("tr")[1:]
         for tr_tag in tr_tags:
             course_detail = {}
             td_tags = tr_tag.find_all("td")
-            for tag_index, tag in tag_id.items():
-                course_detail[tag] = td_tags[tag_index].text.strip()
+            tag_range = len(tag_id) if len(tag_id) < len(td_tags) else len(td_tags)
+            try:
+                for tag_index in range(tag_range):
+                    course_detail[tag_id[tag_index]] = td_tags[tag_index].text.strip()
+            except:
+                display('-', f"Error while Scrapping the Data of {Back.MAGENTA}{roll}{Back.RESET}", start='\r')
+                continue
             course_details.append(course_detail)
         courseDetails[roll] = course_details
         display('*', f"Entities Scrapped = {Back.MAGENTA}{index+1}/{len(student_data)} ({(index+1)/len(student_data)*100:.2f}%){Back.RESET}", start='\r', end='')
->>>>>>> parent of ab4cb6b (Fixed Name conflict between cli argument data and response data)
     display(':', f"Dumping Data to {Back.MAGENTA}{data.write}{Back.RESET}", start='\n')
     with open(f"{data.write}", 'wb') as file:
         pickle.dump(courseDetails, file)
